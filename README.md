@@ -2,7 +2,7 @@
 
 - If you're using a different user, replace "ubuntu" with the one you're currently using
 
-## first, update README.md via excute the following commands
+## First, update README.md by executing the following commands
 
 ```sh
 curl https://raw.githubusercontent.com/devel0624/docker-compose/main/README.md > /home/ubuntu/README.md
