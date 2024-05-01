@@ -36,6 +36,7 @@ sudo docker swarm init | grep "docker swarm join --token" > /home/ubuntu/docker-
 
 echo -e "$green ### Create influx db stack  $default"
 
+mkdir -p /home/ubuntu/docker/influxdb
 curl https://raw.githubusercontent.com/devel0624/docker-compose/main/influxdb/compose/docker-compose.yml > /home/ubuntu/docker/influxdb/docker-compose.yml
 
 docker stack deploy --compose-file /home/ubuntu/docker/influx/docker-compose.yml influxdb_stack
