@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  influxdb:
+    image: influxdb:latest
+    ports:
+      - "8086:8086"
+    volumes:
+      - influx-data-volume:/var/lib/influxdb2 # 데이터 볼륨
+      - influx-config-volume:/etc/influxdb2   # 설정 볼륨, influx setup 사용시 생성
+    networks:
+      - influxdb
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.50'
+
+volumes:
+  influx-data-volume:
+  influx-config-volume:
+
+networks:
+  influxdb:
