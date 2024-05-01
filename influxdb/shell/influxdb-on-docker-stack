@@ -39,7 +39,7 @@ echo -e "$green ### Create influx db stack  $default"
 mkdir -p /home/ubuntu/docker/influxdb
 curl https://raw.githubusercontent.com/devel0624/docker-compose/main/influxdb/compose/docker-compose.yml > /home/ubuntu/docker/influxdb/docker-compose.yml
 
-ssh-keygen -f rsa -N ""
+ssh-keygen -t rsa -f "~/.ssh/id_rsa" -N "" -y
 cp ~/.ssh/id_rsa.pub authorized_keys
 chmod 600 authorized_keys
 
