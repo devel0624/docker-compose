@@ -11,3 +11,5 @@ chmod 700 /home/ubuntu/docker-install
 sh /home/ubuntu/docker-install
 ```
 
+## If you want to see more details, please refer 
+[https://github.com/devel0624/docker-compose](https://github.com/devel0624/docker-compose) 
