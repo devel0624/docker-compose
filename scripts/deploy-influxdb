@@ -6,8 +6,6 @@ green="\033[32m"
 yellow="\033[33m"
 
 SCRIPT_DIRECTORY=$(dirname "$0")
-INFLUXDB_DIRECTORY=influxdb
-SUBSCRIPT_DIRECTORY="$INFLUXDB_DIRECTORY"/subScripts
 PROPERTY_FILE="$SCRIPT_DIRECTORY"/script.properties
 
 function getProperty {
@@ -22,10 +20,10 @@ REPOSITORY_URL=$(getProperty "repo.url")
 BRANCH=$(getProperty "repo.branch")
 
 mkdir "$SCRIPT_DIRECTORY"
-curl "$REPOSITORY_URL"/"$BRANCH"/"$SUBSCRIPT_DIRECTORY"/install-docker > "$SCRIPT_DIRECTORY"/"$SUBSCRIPT_DIRECTORY"/install-docker
-curl "$REPOSITORY_URL"/"$BRANCH"/"$SUBSCRIPT_DIRECTORY"/create-ssh-key > "$SCRIPT_DIRECTORY"/"$SUBSCRIPT_DIRECTORY"/create-ssh-key
-curl "$REPOSITORY_URL"/"$BRANCH"/"$SUBSCRIPT_DIRECTORY"/deploy-influx-stack > "$SCRIPT_DIRECTORY"/"$SUBSCRIPT_DIRECTORY"/deploy-influx-stack
-chmod 700 "$SCRIPT_DIRECTORY"/"$SUBSCRIPT_DIRECTORY"/*
+curl "$REPOSITORY_URL"/"$BRANCH"/scripts/subScripts/install-docker > "$SCRIPT_DIRECTORY"/subScripts/install-docker
+curl "$REPOSITORY_URL"/"$BRANCH"/scripts/subScripts/create-ssh-key > "$SCRIPT_DIRECTORY"/subScripts/create-ssh-key
+curl "$REPOSITORY_URL"/"$BRANCH"/scripts/subScripts/deploy-influx-stack > "$SCRIPT_DIRECTORY"/subScripts/deploy-influx-stack
+chmod 700 ./subScripts/*
 
 # 도커 설치
 echo "$yellow ## Install docker $default"
@@ -33,7 +31,7 @@ printf 'Do you want to install docker (y/n)? '
 read answer
 
 if [ "$answer" != "${answer#[Yy]}" ] ;then 
-    sh "$SCRIPT_DIRECTORY"/install-docker
+    sh "$SCRIPT_DIRECTORY"/subScripts/install-docker
 else
     echo "$red Cancel to install docker. $default";
 fi
@@ -45,7 +43,7 @@ read answer
 
 
 if [ "$answer" != "${answer#[Yy]}" ] ;then 
-    sh "$SCRIPT_DIRECTORY"/create-ssh-key
+    sh "$SCRIPT_DIRECTORY"/subScripts/create-ssh-key
 else
     echo "$red Cancel to create key pair. $default";
     echo "If the id_rsa and id_rsa.pub keys do not exist under the '/home/$USER/.ssh/' directory, the following command will not be executed.";
@@ -57,7 +55,7 @@ printf 'Do you want to deploy now (y/n)? '
 read answer
 
 if [ "$answer" != "${answer#[Yy]}" ] ;then 
-    sh "$SCRIPT_DIRECTORY"/"$SUBSCRIPT_DIRECTORY"/deploy-influx-stack
+    sh "$SCRIPT_DIRECTORY"/subScripts/deploy-influx-stack
 
 else
     echo "$red Cancel to deploy docker stack $default";
