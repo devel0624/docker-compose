@@ -17,4 +17,4 @@ curl https://raw.githubusercontent.com/devel0624/docker-compose/main/influxdb/co
 
 # 배포할 스택의 docker-compose 복사
 echo "$green ### Deploy docker stack via ssh  $default"
-ssh $USER@localhost -o StrictHostKeyChecking=no docker stack deploy --compose-file ~/docker/influxdb/docker-compose.yml influxdb_stack
+ssh "$USER"@localhost -o StrictHostKeyChecking=no docker stack deploy --compose-file ~/docker/influxdb/docker-compose.yml influxdb_stack
