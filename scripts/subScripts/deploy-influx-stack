@@ -12,9 +12,9 @@ sudo docker swarm init | grep "docker swarm join --token" > ~/docker-swarm-join-
 
 # 배포할 스택의 docker-compose 복사
 echo "$green ### Parse compose file  $default"
-mkdir -p /home/ubuntu/docker/influxdb
-curl https://raw.githubusercontent.com/devel0624/docker-compose/main/influxdb/compose/docker-compose.yml > /home/ubuntu/docker/influxdb/docker-compose.yml
+mkdir -p ~/influxdb/compose
+curl https://raw.githubusercontent.com/devel0624/docker-compose/main/influxdb/compose/docker-compose.yml > ~/influxdb/compose/docker-compose.yml
 
 # 배포할 스택의 docker-compose 복사
 echo "$green ### Deploy docker stack via ssh  $default"
-ssh "$USER"@localhost -o StrictHostKeyChecking=no docker stack deploy --compose-file ~/docker/influxdb/docker-compose.yml influxdb_stack
+ssh "$USER"@localhost -o StrictHostKeyChecking=no docker stack deploy --compose-file ~/influxdb/compose/docker-compose.yml influxdb_stack
