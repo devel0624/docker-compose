@@ -1,4 +1,11 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
+function getProperty {
+   PROP_KEY=$1
+   PROP_VALUE=`cat $PROPERTY_FILE | grep "$PROP_KEY" | cut -d'=' -f2`
+
+   echo "${PROP_VALUE/blob/raw}"
+}
 
 default="\033[0m"
 red="\033[31m"
@@ -7,13 +14,6 @@ yellow="\033[33m"
 
 SCRIPT_DIRECTORY=$(dirname "$0")
 PROPERTY_FILE="$SCRIPT_DIRECTORY"/script.properties
-
-function getProperty {
-   PROP_KEY=$1
-   PROP_VALUE=`cat $PROPERTY_FILE | grep "$PROP_KEY" | cut -d'=' -f2`
-   
-   echo "${PROP_VALUE/blob/raw}"
-}
 
 echo "## Reading property from $PROPERTY_FILE"
 REPOSITORY_URL=$(getProperty "repo.url")
