@@ -5,42 +5,39 @@ red="\033[31m"
 green="\033[32m"
 yellow="\033[33m"
 
-echo -e "$green ### Install Docker Engine on Ubuntu $default"
-echo -e "$green ### Install using the apt repository $default"
+# 도커 설치
+echo "$yellow ## Install docker $default"
+printf 'Do you want to install docker (y/n)? '
+read answer
 
-apt-get update
+if [ "$answer" != "${answer#[Yy]}" ] ;then 
+    sh $(dirname "$0")/install-docker
+else
+    echo "$red Cancel to install docker. $default";
+fi
 
-echo -e "$green ### Add Docker's official GPG key: $default"
-sudo apt-get update
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+# 스크립트 최초 실행시 유저의 도커 실행 권한을 우회하기 위한 SSH 사용
+echo "$yellow ## Create ssh key pair  $default"
 
-echo -e "$green ### Add the repository to Apt sources: $default"
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
+printf 'Do you want to create new ssh key pair (y/n)? '
+read answer
 
-echo -e "$green ### Install the latest version Docker packages.  $default"
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+if [ "$answer" != "${answer#[Yy]}" ] ;then 
+    sh $(dirname "$0")/create-ssh-key
+else
+    echo "$red Cancel to create key pair. $default";
+    echo "If the id_rsa and id_rsa.pub keys do not exist under the '/home/$USER/.ssh/' directory, the following command will not be executed.";
+fi
 
-echo -e "$green ### Add ubuntu in group, docker  $default"
-sudo groupadd docker
-sudo usermod -aG docker ubuntu
+# SSH 를 이용한 docker stack 배포
+echo "$yellow ## Deploy docker stack  $default"
+printf 'Do you want to deploy now (y/n)? '
+read answer
 
-echo -e "$green ### Init Docker Swarm  $default"
-sudo docker swarm init | grep "docker swarm join --token" > /home/ubuntu/docker-swarm-join-command.txt
+if [ "$answer" != "${answer#[Yy]}" ] ;then 
+    sh $(dirname "$0")/deploy-influx-stack
 
-echo -e "$green ### Create influx db stack  $default"
-
-mkdir -p /home/ubuntu/docker/influxdb
-curl https://raw.githubusercontent.com/devel0624/docker-compose/main/influxdb/compose/docker-compose.yml > /home/ubuntu/docker/influxdb/docker-compose.yml
-
-ssh-keygen -t rsa -N "" <<< y
-cp ~/.ssh/id_rsa.pub authorized_keys
-chmod 600 authorized_keys
-
-ssh ubuntu@localhost -o StrictHostKeyChecking=no docker stack deploy --compose-file /home/ubuntu/docker/influxdb/docker-compose.yml influxdb_stack
+else
+    echo "$red Cancel to deploy docker stack $default";
+    echo "If you want to deploy docker stack, execute $yellow 'docker stack deploy --compose-file [docker-compose-path] [stack-name]' $default";
+fi
