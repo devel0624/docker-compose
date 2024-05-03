@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+
+default="\033[0m"
+red="\033[31m"
+green="\033[32m"
+yellow="\033[33m"
+
+# 도커 스웜 초기화
+echo "$green ### Init Docker Swarm  $default"
+sudo docker swarm init | grep "docker swarm join --token" > ~/docker-swarm-join-command.txt
+# docker-swarm-join-command.txt 은 생성된 docker swarm 의 join key 가 포함되어 있습니다.
+
+# 배포할 스택의 docker-compose 복사
+echo "$green ### Parse compose file  $default"
+mkdir -p /home/ubuntu/docker/influxdb
+curl https://raw.githubusercontent.com/devel0624/docker-compose/main/influxdb/compose/docker-compose.yml > /home/ubuntu/docker/influxdb/docker-compose.yml
+
+# 배포할 스택의 docker-compose 복사
+echo "$green ### Deploy docker stack via ssh  $default"
+ssh $USER@localhost -o StrictHostKeyChecking=no docker stack deploy --compose-file ~/docker/influxdb/docker-compose.yml influxdb_stack
