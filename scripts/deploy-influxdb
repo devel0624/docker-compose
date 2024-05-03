@@ -15,29 +15,29 @@ yellow="\033[33m"
 SCRIPT_DIRECTORY=$(dirname "$0")
 PROPERTY_FILE="$SCRIPT_DIRECTORY"/script.properties
 
-echo "## Reading property from $PROPERTY_FILE"
+echo -e "## Reading property from $PROPERTY_FILE"
 REPOSITORY_URL=$(getProperty "repo.url")
 BRANCH=$(getProperty "repo.branch")
 
-mkdir "$SCRIPT_DIRECTORY"
+mkdir "$SCRIPT_DIRECTORY"/subScripts
 curl "$REPOSITORY_URL"/"$BRANCH"/scripts/subScripts/install-docker > "$SCRIPT_DIRECTORY"/subScripts/install-docker
 curl "$REPOSITORY_URL"/"$BRANCH"/scripts/subScripts/create-ssh-key > "$SCRIPT_DIRECTORY"/subScripts/create-ssh-key
 curl "$REPOSITORY_URL"/"$BRANCH"/scripts/subScripts/deploy-influx-stack > "$SCRIPT_DIRECTORY"/subScripts/deploy-influx-stack
-chmod 700 ./subScripts/*
+chmod 700 "$SCRIPT_DIRECTORY"/subScripts
 
 # 도커 설치
-echo "$yellow ## Install docker $default"
+echo -e "$yellow ## Install docker $default"
 printf 'Do you want to install docker (y/n)? '
 read answer
 
 if [ "$answer" != "${answer#[Yy]}" ] ;then 
     sh "$SCRIPT_DIRECTORY"/subScripts/install-docker
 else
-    echo "$red Cancel to install docker. $default";
+    echo -e "$red Cancel to install docker. $default";
 fi
 
 # 스크립트 최초 실행시 유저의 도커 실행 권한을 우회하기 위한 SSH 사용
-echo "$yellow ## Create ssh key pair  $default"
+echo -e "$yellow ## Create ssh key pair  $default"
 printf 'Do you want to create new ssh key pair (y/n)? '
 read answer
 
@@ -45,12 +45,12 @@ read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then 
     sh "$SCRIPT_DIRECTORY"/subScripts/create-ssh-key
 else
-    echo "$red Cancel to create key pair. $default";
+    echo -e "$red Cancel to create key pair. $default";
     echo "If the id_rsa and id_rsa.pub keys do not exist under the '/home/$USER/.ssh/' directory, the following command will not be executed.";
 fi
 
 # SSH 를 이용한 docker stack 배포
-echo "$yellow ## Deploy docker stack  $default"
+echo -e "$yellow ## Deploy docker stack  $default"
 printf 'Do you want to deploy now (y/n)? '
 read answer
 
@@ -58,6 +58,6 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     sh "$SCRIPT_DIRECTORY"/subScripts/deploy-influx-stack
 
 else
-    echo "$red Cancel to deploy docker stack $default";
-    echo "If you want to deploy docker stack, execute $yellow 'docker stack deploy --compose-file [docker-compose-path] [stack-name]' $default";
+    echo -e "$red Cancel to deploy docker stack $default";
+    echo -e "If you want to deploy docker stack, execute $yellow 'docker stack deploy --compose-file [docker-compose-path] [stack-name]' $default";
 fi
