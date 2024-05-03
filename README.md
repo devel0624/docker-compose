@@ -11,10 +11,12 @@ curl https://raw.githubusercontent.com/devel0624/docker-compose/main/README.md >
 ## Apply influxdb on docker stack, Just Open terminal and excute the following commands
 
 ```sh
-curl https://raw.githubusercontent.com/devel0624/docker-compose/main/influxdb/shell/influxdb-on-docker-stack > ~/deploy-influxdb-stack
-chmod 700 ~/deploy-influxdb-stack
+mkdir ~/scripts
+curl https://raw.githubusercontent.com/devel0624/docker-compose/main/scripts/deploy-influxdb > ~/scripts/deploy-influxdb
+curl https://raw.githubusercontent.com/devel0624/docker-compose/main/scripts/script.properties > ~/scripts/script.properties
+chmod 700 ~/scripts/deploy-influxdb
 
-sh ~/deploy-influxdb-stack
+bash ~/scripts/deploy-influxdb
 ```
 
 - After the installation is complete, terminate the session and reconnect via SSH. 
