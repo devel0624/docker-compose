@@ -5,7 +5,6 @@ red="\033[31m"
 green="\033[32m"
 yellow="\033[33m"
 
-PROPERTY_FILE="$SCRIPT_DIRECTORY"/script.properties
 
 function getProperty {
    PROP_KEY=$1
@@ -15,11 +14,12 @@ function getProperty {
    echo "${RAW_FILE_URL/e.git/e}"
 }
 
+SCRIPT_DIRECTORY=$(dirname "$0")
+PROPERTY_FILE="$SCRIPT_DIRECTORY"/script.properties
+SUBSCRIPT_DIRECTORY="$SCRIPT_DIRECTORY"/subScripts
+
 echo "## Reading property from $PROPERTY_FILE"
 REPOSITORY_URL=$(getProperty "repo.url")/$(getProperty "repo.branch")
-
-SCRIPT_DIRECTORY=$(dirname "$0")
-SUBSCRIPT_DIRECTORY="$SCRIPT_DIRECTORY"/subScripts
 
 mkdir "$SUBSCRIPT_DIRECTORY"
 curl "$REPOSITORY_URL"/"$SUBSCRIPT_DIRECTORY"/install-docker > "$SUBSCRIPT_DIRECTORY"/install-docker
