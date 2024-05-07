@@ -22,9 +22,9 @@ echo "## Reading property from $PROPERTY_FILE"
 REPOSITORY_URL=$(getProperty "repo.url")/$(getProperty "repo.branch")
 
 mkdir "$SUBSCRIPT_DIRECTORY"
-curl "$REPOSITORY_URL"/"$SUBSCRIPT_DIRECTORY"/install-docker > "$SUBSCRIPT_DIRECTORY"/install-docker
-curl "$REPOSITORY_URL"/"$SUBSCRIPT_DIRECTORY"/create-ssh-key > "$SUBSCRIPT_DIRECTORY"/create-ssh-key
-curl "$REPOSITORY_URL"/"$SUBSCRIPT_DIRECTORY"/deploy-influx-stack > "$SUBSCRIPT_DIRECTORY"/deploy-influx-stack
+curl "$REPOSITORY_URL"/scripts/subScripts/install-docker > "$SUBSCRIPT_DIRECTORY"/install-docker
+curl "$REPOSITORY_URL"/scripts/subScripts/create-ssh-key > "$SUBSCRIPT_DIRECTORY"/create-ssh-key
+curl "$REPOSITORY_URL"/scripts/subScripts/deploy-influx-stack > "$SUBSCRIPT_DIRECTORY"/deploy-influx-stack
 chmod 700 "$SUBSCRIPT_DIRECTORY"/*
 
 # 도커 설치
